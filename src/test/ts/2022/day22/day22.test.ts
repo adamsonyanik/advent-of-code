@@ -40,10 +40,13 @@ for (let x = 0; x < map[0].length; x++) {
         break;
     }
 }
-
+//   F R
+//   D
+// L B
+// U
 function move(steps: number): boolean {
     for (let i = 0; i < steps; i++) {
-        const newPos = {x: pos.x, y: pos.y, facing: pos.facing};
+        let newPos = {x: pos.x, y: pos.y, facing: pos.facing};
         switch (pos.facing) {
             case "u":
                 newPos.y--;
@@ -60,50 +63,36 @@ function move(steps: number): boolean {
         }
 
         if (newPos.x < 0 || newPos.x >= map[0].length || newPos.y < 0 || newPos.y >= map.length || map[newPos.y][newPos.x] == " ") {
-            if (newPos.facing == "u") {
-                for (let y = newPos.y + 1; y < map.length; y++) {
-                    if (map[y][newPos.x] == " ") {
-                        newPos.y = y - 1;
-                        break;
-                    }
-                    if (y == map.length - 1)
-                        newPos.y = map.length - 1;
-                }
-            }
-
-            if (newPos.facing == "d") {
-                for (let y = newPos.y - 1; y >= 0; y--) {
-                    if (map[y][newPos.x] == " ") {
-                        newPos.y = y + 1;
-                        break;
-                    }
-                    if (y == 0)
-                        newPos.y = 0;
-                }
-            }
-
-            if (newPos.facing == "r") {
-                for (let x = newPos.x - 1; x >= 0; x--) {
-                    if (map[newPos.y][x] == " ") {
-                        newPos.x = x + 1;
-                        break;
-                    }
-
-                    if (x == 0)
-                        newPos.x = 0;
-                }
-            }
-
-            if (newPos.facing == "l") {
-                for (let x = newPos.x + 1; x < map[0].length; x++) {
-                    if (map[newPos.y][x] == " ") {
-                        newPos.x = x - 1;
-                        break;
-                    }
-                    if (x == map[0].length - 1)
-                        newPos.x = map[0].length - 1;
-                }
-            }
+            if (newPos.y < 0 && newPos.x < 100) { // f - u
+                newPos = {x: 0, y: newPos.x - 50 + 150, facing: getTurn("R", newPos.facing)};
+            } else if (newPos.y < 0 && newPos.x > 99) { // r - u
+                newPos = {x: newPos.x - 100, y: 199, facing: newPos.facing};
+            } else if (newPos.x == 150) { // r - b
+                newPos = {x: 99, y: 149 - newPos.y, facing: getTurn("O", newPos.facing)};
+            } else if (newPos.x == 49 && newPos.y < 50 && newPos.facing == "l") { // f - l
+                newPos = {x: 0, y: 149 - newPos.y, facing: getTurn("O", newPos.facing)};
+            } else if (newPos.x >= 100 && newPos.y == 50 && newPos.facing == "d") { // r - d
+                newPos = {x: 99, y: 50 + newPos.x - 100, facing: getTurn("R", newPos.facing)};
+            } else if (newPos.x == 49 && newPos.y >= 50 && newPos.y <= 99 && newPos.facing == "l") { // d - l
+                newPos = {x: newPos.y - 50, y: 100, facing: getTurn("L", newPos.facing)};
+            } else if (newPos.x == 100 && newPos.y >= 50 && newPos.y <= 99 && newPos.facing == "r") { // d - r
+                newPos = {x: newPos.y - 50 + 100, y: 49, facing: getTurn("L", newPos.facing)};
+            } else if (newPos.x < 0 && newPos.y < 150) { // l - f
+                newPos = {x: 50, y: 49 - (newPos.y - 100), facing: getTurn("O", newPos.facing)};
+            } else if (newPos.x < 50 && newPos.y == 99 && newPos.facing == "u") { // l - d
+                newPos = {x: 50, y: newPos.x + 50, facing: getTurn("R", newPos.facing)};
+            } else if (newPos.x == 100 && newPos.y > 99 && newPos.facing == "r") { // b - r
+                newPos = {x: 149, y: 49 - (newPos.y - 100), facing: getTurn("O", newPos.facing)};
+            } else if (newPos.x > 49 && newPos.y == 150 && newPos.facing == "d") { // b - u
+                newPos = {x: 49, y: 150 + newPos.x - 50, facing: getTurn("R", newPos.facing)};
+            } else if (newPos.x < 0 && newPos.y > 149) { // u - f
+                newPos = {x: 50 + (newPos.y - 150), y: 0, facing: getTurn("L", newPos.facing)};
+            } else if (newPos.y > 199) { // u - r
+                newPos = {x: newPos.x + 100, y: 0, facing: newPos.facing};
+            } else if (newPos.x == 50 && newPos.y > 149 && newPos.facing == "r") { // u - b
+                newPos = {x: newPos.y - 150 + 50, y: 149, facing: getTurn("L", newPos.facing)};
+            } else
+                throw new Error(newPos.x + ", " + newPos.y + ", " + newPos.facing);
         }
 
         if (map[newPos.y][newPos.x] == "#")
@@ -148,6 +137,44 @@ function turn(dir: "L" | "R") {
         }
 }
 
+function getTurn(dir: "L" | "R" | "O", look: string) {
+    if (dir == "R")
+        switch (look) {
+            case "u":
+                return "r";
+            case "d":
+                return "l";
+            case "r":
+                return "d";
+            case "l":
+                return "u";
+        }
+    else if (dir == "L")
+        switch (look) {
+            case "u":
+                return "l";
+            case "d":
+                return "r";
+            case "r":
+                return "u";
+            case "l":
+                return "d";
+        }
+    else
+        switch (look) {
+            case "u":
+                return "d";
+            case "d":
+                return "u";
+            case "r":
+                return "l";
+            case "l":
+                return "r";
+        }
+
+    throw new Error();
+}
+
 function getFaceCount(face: string) {
     switch (face) {
         case "u":
@@ -164,15 +191,138 @@ function getFaceCount(face: string) {
 }
 
 function getFinalCoords() {
+    pos = {x: 50, y: 0, facing: "u"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 50, y: 0, facing: "l"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 149, y: 0, facing: "r"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 100, y: 0, facing: "u"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 100, y: 49, facing: "d"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 50, y: 50, facing: "l"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 99, y: 50, facing: "r"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 0, y: 100, facing: "l"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 99, y: 100, facing: "r"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 0, y: 100, facing: "u"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 50, y: 149, facing: "d"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 49, y: 150, facing: "r"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 0, y: 150, facing: "l"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 0, y: 199, facing: "d"};
+    drawPos();
+    move(1);
+    draw();
+
+    console.log();
+
+    pos = {x: 50, y: 0, facing: "r"};
     for (const m of moves) {
         if (m == "L" || m == "R")
             turn(m);
         else move(m);
-
-        //console.log(map/*.filter((r, i) => i >= pos.y - 30 && i <= pos.y + 30)*/.map((r, y) => y + " " + r.map((i, x) => pos.x == x && pos.y == y ? pos.facing : i).join("")).join("\n"));
     }
 
     return 1000 * (pos.y + 1) + 4 * (pos.x + 1) + getFaceCount(pos.facing);
+}
+
+function getCubeFace(x: number, y: number) {
+    if (y < 50 && x < 100)
+        return "F";
+    else if (y < 50 && x < 150)
+        return "R";
+    else if (y < 100)
+        return "D";
+    else if (y < 150 && x < 50)
+        return "L";
+    else if (y < 150)
+        return "B";
+    else if (y < 200 && x < 50)
+        return "U";
+
+    throw new Error();
+}
+
+function drawPos() {
+    console.log((pos.x % 50) + ", " + (pos.y % 50) + ", " + getCubeFace(pos.x, pos.y) + ", " + pos.facing);
+}
+
+function draw() {
+    drawPos();
+    //console.log(map.map((r, y) => y + " " + r.map((i, x) => pos.x == x && pos.y == y ? pos.facing : i).join("")).join("\n"));
 }
 
 function getInput(): string {
