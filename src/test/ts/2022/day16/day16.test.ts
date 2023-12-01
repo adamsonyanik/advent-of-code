@@ -4,32 +4,41 @@ test("day16", () => {
     console.log(getMostFlowRateIn(26));
 });
 
-type ValveNet = { id: string, flowRate: number, links: string[] }[];
+type ValveNet = { id: string; flowRate: number; links: string[] }[];
 
-const valveNet: ValveNet = getInput().split("\n").map(v => ({
-    id: v.split(";")[0].split("=")[0],
-    flowRate: Number(v.split(";")[0].split("=")[1]),
-    links: v.split(";")[1].split(",")
-}));
+const valveNet: ValveNet = getInput()
+    .split("\n")
+    .map((v) => ({
+        id: v.split(";")[0].split("=")[0],
+        flowRate: Number(v.split(";")[0].split("=")[1]),
+        links: v.split(";")[1].split(",")
+    }));
 
-const flowValves = ["AA", ...valveNet.filter(v => v.flowRate != 0).map(v => v.id)];
+const flowValves = ["AA", ...valveNet.filter((v) => v.flowRate != 0).map((v) => v.id)];
 
-type Context = { currentPos: string, currentPosElephant: string, openedValves: string[], openedValvesAt: number[], minMe: number, minElephant: number };
+type Context = {
+    currentPos: string;
+    currentPosElephant: string;
+    openedValves: string[];
+    openedValvesAt: number[];
+    minMe: number;
+    minElephant: number;
+};
 
-const shorterNet: { id: string, flowRate: number, links: { id: string, distance: number }[] }[] = [];
+const shorterNet: { id: string; flowRate: number; links: { id: string; distance: number }[] }[] = [];
 for (const v of flowValves) {
     const links = [];
     for (const link of flowValves) {
         if (link == v) continue;
 
-        const other = shorterNet.filter(n => n.id == link)[0];
+        const other = shorterNet.filter((n) => n.id == link)[0];
         if (other != null) {
-            links.push({id: link, distance: other.links.filter(n => n.id == v)[0].distance});
+            links.push({ id: link, distance: other.links.filter((n) => n.id == v)[0].distance });
         } else {
-            links.push({id: link, distance: search(v, link).length + 1});
+            links.push({ id: link, distance: search(v, link).length + 1 });
         }
     }
-    shorterNet.push({id: v, flowRate: getValve(v).flowRate, links: links});
+    shorterNet.push({ id: v, flowRate: getValve(v).flowRate, links: links });
 }
 
 function getMostFlowRateIn(limit: number): number {
@@ -51,25 +60,29 @@ function explore(context: Context): Context {
     let counter = 0;
     if (context.minMe > context.minElephant) {
         for (const linkMe of options.linksMe) {
-            contexts.push(explore({
-                currentPos: linkMe.id,
-                currentPosElephant: context.currentPosElephant,
-                openedValves: [...context.openedValves, linkMe.id],
-                openedValvesAt: [...context.openedValvesAt, context.minMe - linkMe.distance],
-                minMe: context.minMe - linkMe.distance,
-                minElephant: context.minElephant,
-            }));
+            contexts.push(
+                explore({
+                    currentPos: linkMe.id,
+                    currentPosElephant: context.currentPosElephant,
+                    openedValves: [...context.openedValves, linkMe.id],
+                    openedValvesAt: [...context.openedValvesAt, context.minMe - linkMe.distance],
+                    minMe: context.minMe - linkMe.distance,
+                    minElephant: context.minElephant
+                })
+            );
         }
     } else {
         for (const linkElephant of options.linksElephant) {
-            contexts.push(explore({
-                currentPos: context.currentPos,
-                currentPosElephant: linkElephant.id,
-                openedValves: [...context.openedValves, linkElephant.id],
-                openedValvesAt: [...context.openedValvesAt, context.minElephant - linkElephant.distance],
-                minMe: context.minMe,
-                minElephant: context.minElephant - linkElephant.distance,
-            }));
+            contexts.push(
+                explore({
+                    currentPos: context.currentPos,
+                    currentPosElephant: linkElephant.id,
+                    openedValves: [...context.openedValves, linkElephant.id],
+                    openedValvesAt: [...context.openedValvesAt, context.minElephant - linkElephant.distance],
+                    minMe: context.minMe,
+                    minElephant: context.minElephant - linkElephant.distance
+                })
+            );
 
             if (context.minElephant == 26) {
                 counter++;
@@ -94,17 +107,21 @@ function calcReleasedPressure(context: Context) {
 
 function getOptions(context: Context) {
     return {
-        linksMe: getValveSN(context.currentPos).links.filter(v => context.minMe >= v.distance && !context.openedValves.includes(v.id)),
-        linksElephant: getValveSN(context.currentPosElephant).links.filter(v => context.minElephant >= v.distance && !context.openedValves.includes(v.id))
+        linksMe: getValveSN(context.currentPos).links.filter(
+            (v) => context.minMe >= v.distance && !context.openedValves.includes(v.id)
+        ),
+        linksElephant: getValveSN(context.currentPosElephant).links.filter(
+            (v) => context.minElephant >= v.distance && !context.openedValves.includes(v.id)
+        )
     };
 }
 
 function getValveSN(id: string) {
-    return shorterNet.filter(v => v.id == id)[0];
+    return shorterNet.filter((v) => v.id == id)[0];
 }
 
 function getValve(id: string) {
-    return valveNet.filter(v => v.id == id)[0];
+    return valveNet.filter((v) => v.id == id)[0];
 }
 
 function getInput(): string {
@@ -122,7 +139,7 @@ function getInput(): string {
     return data.data;
 }
 
-type AStarNode = { id: string, f: number, g: number, h: number, parent: AStarNode }
+type AStarNode = { id: string; f: number; g: number; h: number; parent: AStarNode };
 
 function search(startPos: string, endPos: string): AStarNode[] {
     const gridNodes: AStarNode[] = [];
@@ -133,12 +150,12 @@ function search(startPos: string, endPos: string): AStarNode[] {
             f: 0,
             g: 0,
             h: 0,
-            parent: null,
+            parent: null
         });
     }
 
-    const start = gridNodes.filter(n => n.id == startPos)[0];
-    const end = gridNodes.filter(n => n.id == endPos)[0];
+    const start = gridNodes.filter((n) => n.id == startPos)[0];
+    const end = gridNodes.filter((n) => n.id == endPos)[0];
 
     const openList: AStarNode[] = [];
     const closedList: AStarNode[] = [];
@@ -176,7 +193,6 @@ function search(startPos: string, endPos: string): AStarNode[] {
             const gScore = currentNode.g + 1;
             let gScoreIsBest = false;
 
-
             if (!openList.includes(neighbor)) {
                 gScoreIsBest = true;
                 neighbor.h = heuristic(neighbor.id, end.id);
@@ -200,5 +216,5 @@ function heuristic(pos0: string, pos1: string): number {
 }
 
 function neighbors(grid: AStarNode[], node: AStarNode): AStarNode[] {
-    return grid.filter(n => getValve(node.id).links.includes(n.id));
+    return grid.filter((n) => getValve(node.id).links.includes(n.id));
 }

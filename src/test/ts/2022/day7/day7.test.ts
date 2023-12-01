@@ -4,25 +4,27 @@ test("day7", () => {
     console.log(getTotalSizeOfMax100000());
 });
 
-type Command = { command: string, args: string, out: string[] }
+type Command = { command: string; args: string; out: string[] };
 
-type Dir = { name: string, files: File[], dirs: Dir[], parent: Dir };
-type File = { name: string, size: number };
+type Dir = { name: string; files: File[]; dirs: Dir[]; parent: Dir };
+type File = { name: string; size: number };
 
-const root: Dir = {name: "/", files: [], dirs: [], parent: null};
+const root: Dir = { name: "/", files: [], dirs: [], parent: null };
 let cd = root;
 
 function getTotalSizeOfMax100000() {
-    const input: Command[] = getInput().split("$ ").map(c => {
-        const out = c.split("\n");
-        out.shift();
-        out.pop();
-        return {
-            command: c.split("\n")[0].split(" ")[0],
-            args: c.split("\n")[0].split(" ")[1],
-            out: out
-        };
-    });
+    const input: Command[] = getInput()
+        .split("$ ")
+        .map((c) => {
+            const out = c.split("\n");
+            out.shift();
+            out.pop();
+            return {
+                command: c.split("\n")[0].split(" ")[0],
+                args: c.split("\n")[0].split(" ")[1],
+                out: out
+            };
+        });
     input.shift();
 
     for (const c of input) {
@@ -32,10 +34,9 @@ function getTotalSizeOfMax100000() {
             } else if (c.args == "..") {
                 cd = cd.parent;
             } else {
-                if (cd.dirs.filter(d => d.name == c.args).length == 0)
-                    addDir(cd, c.args);
+                if (cd.dirs.filter((d) => d.name == c.args).length == 0) addDir(cd, c.args);
 
-                cd = cd.dirs.filter(d => d.name == c.args)[0];
+                cd = cd.dirs.filter((d) => d.name == c.args)[0];
             }
         } else if (c.command == "ls") {
             for (const line of c.out) {
@@ -51,7 +52,9 @@ function getTotalSizeOfMax100000() {
 
     const mustDeleteSize = calcSize(root) - (70000000 - 30000000);
 
-    const dirs = getAllDir(root, []).filter(d => calcSize(d) >= mustDeleteSize).sort((a, b) => calcSize(a) - calcSize(b));
+    const dirs = getAllDir(root, [])
+        .filter((d) => calcSize(d) >= mustDeleteSize)
+        .sort((a, b) => calcSize(a) - calcSize(b));
 
     return calcSize(dirs[0]);
 }
@@ -78,19 +81,16 @@ function calcSize(dir: Dir): number {
     return sum;
 }
 
-
 function addFile(parent: Dir, name: string, size: number) {
-    if (parent.files.filter(f => f.name == name).length > 0)
-        return;
+    if (parent.files.filter((f) => f.name == name).length > 0) return;
 
-    parent.files.push({name: name, size: size});
+    parent.files.push({ name: name, size: size });
 }
 
 function addDir(parent: Dir, name: string) {
-    if (parent.dirs.filter(d => d.name == name).length > 0)
-        return;
+    if (parent.dirs.filter((d) => d.name == name).length > 0) return;
 
-    parent.dirs.push({name: name, files: [], dirs: [], parent: parent});
+    parent.dirs.push({ name: name, files: [], dirs: [], parent: parent });
 }
 
 function getInput(): string {

@@ -5,25 +5,27 @@ test("day18", async () => {
     console.log(area);
 });
 
-const cubes = getInput().split("\n").map(r => ({
-    x: Number(r.split(",")[0]),
-    y: Number(r.split(",")[1]),
-    z: Number(r.split(",")[2])
-}));
+const cubes = getInput()
+    .split("\n")
+    .map((r) => ({
+        x: Number(r.split(",")[0]),
+        y: Number(r.split(",")[1]),
+        z: Number(r.split(",")[2])
+    }));
 
 const max = {
-    x: Math.max(...cubes.map(c => c.x)),
-    y: Math.max(...cubes.map(c => c.y)),
-    z: Math.max(...cubes.map(c => c.z))
+    x: Math.max(...cubes.map((c) => c.x)),
+    y: Math.max(...cubes.map((c) => c.y)),
+    z: Math.max(...cubes.map((c) => c.z))
 };
 
 const nCoords = [
-    {x: 1, y: 0, z: 0},
-    {x: -1, y: 0, z: 0},
-    {x: 0, y: 1, z: 0},
-    {x: 0, y: -1, z: 0},
-    {x: 0, y: 0, z: 1},
-    {x: 0, y: 0, z: -1},
+    { x: 1, y: 0, z: 0 },
+    { x: -1, y: 0, z: 0 },
+    { x: 0, y: 1, z: 0 },
+    { x: 0, y: -1, z: 0 },
+    { x: 0, y: 0, z: 1 },
+    { x: 0, y: 0, z: -1 }
 ];
 
 async function getSurfaceArea() {
@@ -43,17 +45,17 @@ async function getSurfaceArea() {
         grid[cube.z][cube.y][cube.x] = true;
     }
 
-    await walk(grid, {x: 0, y: 0, z: 0}, []);
+    await walk(grid, { x: 0, y: 0, z: 0 }, []);
 
     return counter;
 }
 
 let counter = 0;
 
-async function walk(grid: boolean[][][], pos: { x: number, y: number, z: number }, visited: string[]) {
+async function walk(grid: boolean[][][], pos: { x: number; y: number; z: number }, visited: string[]) {
     visited.push(`${pos.x},${pos.y},${pos.z}`);
     for (const coord of nCoords) {
-        const c = {x: coord.x + pos.x, y: coord.y + pos.y, z: coord.z + pos.z};
+        const c = { x: coord.x + pos.x, y: coord.y + pos.y, z: coord.z + pos.z };
         if (c.x < -1 || c.x > max.x + 1 || c.y < -1 || c.y > max.y + 1 || c.z < -1 || c.z > max.z + 1) continue;
         if (visited.includes(`${c.x},${c.y},${c.z}`)) continue;
         if (grid[c.z] && grid[c.z][c.y] && grid[c.z][c.y][c.x]) {

@@ -5,20 +5,26 @@ test("day14", () => {
 });
 
 function getMaxSand() {
-    const paths = getInput().split("\n").map(p => p.split(" -> ").map(pos => ({
-        x: Number(pos.split(",")[0]),
-        y: Number(pos.split(",")[1])
-    })));
+    const paths = getInput()
+        .split("\n")
+        .map((p) =>
+            p.split(" -> ").map((pos) => ({
+                x: Number(pos.split(",")[0]),
+                y: Number(pos.split(",")[1])
+            }))
+        );
 
-
-    let ys = [...paths.map(p => p.map(pos => pos.y)).flat(), 0];
+    let ys = [...paths.map((p) => p.map((pos) => pos.y)).flat(), 0];
 
     let maxY = Math.max(...ys);
 
-    paths.push([{x: 100, y: maxY + 2}, {x: 800, y: maxY + 2}]);
+    paths.push([
+        { x: 100, y: maxY + 2 },
+        { x: 800, y: maxY + 2 }
+    ]);
 
-    const xs = [...paths.map(p => p.map(pos => pos.x)).flat(), 500];
-    ys = [...paths.map(p => p.map(pos => pos.y)).flat(), 0];
+    const xs = [...paths.map((p) => p.map((pos) => pos.x)).flat(), 500];
+    ys = [...paths.map((p) => p.map((pos) => pos.y)).flat(), 0];
 
     const minX = Math.min(...xs);
     const maxX = Math.max(...xs);
@@ -30,8 +36,7 @@ function getMaxSand() {
     for (let y = 0; y <= maxY - minY; y++) {
         grid.push([]);
         for (let x = 0; x <= maxX - minX; x++) {
-            if (x == 500 - minX && y == 0)
-                grid[y].push("+");
+            if (x == 500 - minX && y == 0) grid[y].push("+");
             grid[y].push(".");
         }
     }
@@ -65,18 +70,18 @@ function getInput(): string {
 }
 
 function dropSand(grid: ("." | "#" | "o" | "+")[][], x: number): boolean {
-    let pos: { x: number, y: number } = {x: x, y: 0};
+    let pos: { x: number; y: number } = { x: x, y: 0 };
     while (pos.x < grid[0].length && pos.x >= 0 && pos.y < grid.length - 1 && pos.y >= 0) {
         if (grid[pos.y + 1][pos.x] == ".") {
-            pos = {x: pos.x, y: pos.y + 1};
+            pos = { x: pos.x, y: pos.y + 1 };
         } else if (pos.x == 0) {
             return false;
         } else if (grid[pos.y + 1][pos.x - 1] == ".") {
-            pos = {x: pos.x - 1, y: pos.y + 1};
+            pos = { x: pos.x - 1, y: pos.y + 1 };
         } else if (pos.x == grid[0].length - 1) {
             return false;
         } else if (grid[pos.y + 1][pos.x + 1] == ".") {
-            pos = {x: pos.x + 1, y: pos.y + 1};
+            pos = { x: pos.x + 1, y: pos.y + 1 };
         } else if (pos.x == x && pos.y == 0) {
             console.log("at top");
             return false;

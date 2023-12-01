@@ -7,16 +7,13 @@ export class Stack<T> {
 
     pop = () => this.items.pop();
     push = (...items: T[]) => this.items.push(...items);
-    peek: () => undefined | T = () =>
-        this.length == 0
-            ? undefined
-            : this.items[this.length - 1];
+    peek: () => undefined | T = () => (this.length == 0 ? undefined : this.items[this.length - 1]);
 
     get length() {
         return this.items.length;
     }
 
-    * [Symbol.iterator]() {
+    *[Symbol.iterator]() {
         for (const item of this.items) yield item;
     }
 }

@@ -13,18 +13,18 @@ function getEvolutionSize() {
         fish[Number(i)]++;
     }
 
-    for (let i = 0; i < 256; i++){
+    for (let i = 0; i < 256; i++) {
         simulate();
     }
 
     return fish.reduce((p, c) => p + c);
 }
 
-function simulate(){
+function simulate() {
     const newFish = fish[0];
 
     for (let i = 0; i < fish.length - 1; i++) {
-        fish[i] = fish[i+1];
+        fish[i] = fish[i + 1];
     }
 
     fish[8] = newFish;

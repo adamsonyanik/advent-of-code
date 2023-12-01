@@ -4,38 +4,44 @@ test("day12", () => {
     console.log(getShortestPath());
 });
 
-type Pos = { x: number, y: number };
+type Pos = { x: number; y: number };
 
 function getShortestPath() {
-    let start = {x: 0, y: 0};
-    let end = {x: 0, y: 0};
+    let start = { x: 0, y: 0 };
+    let end = { x: 0, y: 0 };
 
-    const grid = getInput().split("\n").map(e => e.split(""));
+    const grid = getInput()
+        .split("\n")
+        .map((e) => e.split(""));
     for (let y = 0; y < grid.length; y++) {
         for (let x = 0; x < grid[0].length; x++) {
             if (grid[y][x] == "S") {
-                start = {x, y};
+                start = { x, y };
             } else if (grid[y][x] == "E") {
-                end = {x, y};
+                end = { x, y };
             }
         }
     }
 
-    const input = getInput().split("\n").map(e => e.split("").map(c => {
-        if (c == "S") {
-            return 0;
-        } else if (c == "E") {
-            return 25;
-        }
+    const input = getInput()
+        .split("\n")
+        .map((e) =>
+            e.split("").map((c) => {
+                if (c == "S") {
+                    return 0;
+                } else if (c == "E") {
+                    return 25;
+                }
 
-        return c.charCodeAt(0) - 97;
-    }));
+                return c.charCodeAt(0) - 97;
+            })
+        );
 
     const startingPos = [];
     for (let y = 0; y < input.length; y++) {
         for (let x = 0; x < input[0].length; x++) {
             if (input[y][x] == 0) {
-                const path = search(input, {x, y}, end);
+                const path = search(input, { x, y }, end);
                 if (path) {
                     startingPos.push(path.length);
                 }
@@ -51,7 +57,7 @@ function getInput(): string {
     return data.data;
 }
 
-type AStarNode = { id: number, pos: Pos, f: number, g: number, h: number, parent: AStarNode, height: number }
+type AStarNode = { id: number; pos: Pos; f: number; g: number; h: number; parent: AStarNode; height: number };
 
 function search(grid: number[][], startPos: Pos, endPos: Pos): AStarNode[] {
     const gridNodes: AStarNode[][] = [];
@@ -62,7 +68,7 @@ function search(grid: number[][], startPos: Pos, endPos: Pos): AStarNode[] {
         for (let x = 0; x < grid[y].length; x++) {
             gridNodes[y].push({
                 id: id,
-                pos: {x: x, y: y},
+                pos: { x: x, y: y },
                 f: 0,
                 g: 0,
                 h: 0,
@@ -73,8 +79,8 @@ function search(grid: number[][], startPos: Pos, endPos: Pos): AStarNode[] {
         }
     }
 
-    const start = gridNodes.flat().filter(n => n.pos.x == startPos.x && n.pos.y == startPos.y)[0];
-    const end = gridNodes.flat().filter(n => n.pos.x == endPos.x && n.pos.y == endPos.y)[0];
+    const start = gridNodes.flat().filter((n) => n.pos.x == startPos.x && n.pos.y == startPos.y)[0];
+    const end = gridNodes.flat().filter((n) => n.pos.x == endPos.x && n.pos.y == endPos.y)[0];
 
     const openList: AStarNode[] = [];
     const closedList: AStarNode[] = [];
@@ -111,7 +117,6 @@ function search(grid: number[][], startPos: Pos, endPos: Pos): AStarNode[] {
 
             const gScore = currentNode.g + 1;
             let gScoreIsBest = false;
-
 
             if (!openList.includes(neighbor)) {
                 gScoreIsBest = true;

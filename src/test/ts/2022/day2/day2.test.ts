@@ -5,15 +5,17 @@ test("day2", () => {
 });
 
 function calcScore(): number {
-    const input: { a: string, b: string }[] = getInput().split("\n").map(s => {
-        const r = s.split(" ");
-        return {a: r[0], b: r[1]};
-    });
-    const shouldPlay = input.map(e => ({a: e.a, b: getShouldPlay(e)}));
+    const input: { a: string; b: string }[] = getInput()
+        .split("\n")
+        .map((s) => {
+            const r = s.split(" ");
+            return { a: r[0], b: r[1] };
+        });
+    const shouldPlay = input.map((e) => ({ a: e.a, b: getShouldPlay(e) }));
     return shouldPlay.reduce((p, c) => p + getScore(c.b, getResult(c)), 0);
 }
 
-function getShouldPlay(round: { a: string, b: string }): string {
+function getShouldPlay(round: { a: string; b: string }): string {
     switch (round.a + round.b) {
         case "AX":
             return "Z";
@@ -38,7 +40,7 @@ function getShouldPlay(round: { a: string, b: string }): string {
     }
 }
 
-function getResult(round: { a: string, b: string }): number {
+function getResult(round: { a: string; b: string }): number {
     switch (round.a + round.b) {
         case "AX":
             return 0;

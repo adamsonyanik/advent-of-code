@@ -4,18 +4,20 @@ test("day4", () => {
     console.log(getNumOfFullContainments());
 });
 
-type Pair = { first: Range, second: Range };
-type Range = { start: number, end: number };
+type Pair = { first: Range; second: Range };
+type Range = { start: number; end: number };
 
 function getNumOfFullContainments(): number {
-    const input: Pair[] = getInput().split("\n").map(e => {
-        const first = e.split(",")[0].split("-");
-        const second = e.split(",")[1].split("-");
-        return {
-            first: {start: Number(first[0]), end: Number(first[1])},
-            second: {start: Number(second[0]), end: Number(second[1])}
-        };
-    });
+    const input: Pair[] = getInput()
+        .split("\n")
+        .map((e) => {
+            const first = e.split(",")[0].split("-");
+            const second = e.split(",")[1].split("-");
+            return {
+                first: { start: Number(first[0]), end: Number(first[1]) },
+                second: { start: Number(second[0]), end: Number(second[1]) }
+            };
+        });
 
     return input.filter(overlap).length;
 }

@@ -5,7 +5,9 @@ test("day8", () => {
 });
 
 function getNumOfVisibleTrees() {
-    const input: number[][] = getInput().split("\n").map(c => c.split("").map(t => Number(t)));
+    const input: number[][] = getInput()
+        .split("\n")
+        .map((c) => c.split("").map((t) => Number(t)));
 
     const scores = [];
 
@@ -36,8 +38,7 @@ function getLeftRightSize(trees: number[][]) {
 
 function isVisFromLeft(trees: number[][], x: number, y: number) {
     for (let i = 0; i < x; i++) {
-        if (get(trees, i, y) >= get(trees, x, y))
-            return false;
+        if (get(trees, i, y) >= get(trees, x, y)) return false;
     }
 
     return true;
@@ -45,8 +46,7 @@ function isVisFromLeft(trees: number[][], x: number, y: number) {
 
 function isVisFromRight(trees: number[][], x: number, y: number) {
     for (let i = x + 1; i < getLeftRightSize(trees); i++) {
-        if (get(trees, i, y) >= get(trees, x, y))
-            return false;
+        if (get(trees, i, y) >= get(trees, x, y)) return false;
     }
 
     return true;
@@ -54,8 +54,7 @@ function isVisFromRight(trees: number[][], x: number, y: number) {
 
 function isVisFromUp(trees: number[][], x: number, y: number) {
     for (let i = 0; i < y; i++) {
-        if (get(trees, x, i) >= get(trees, x, y))
-            return false;
+        if (get(trees, x, i) >= get(trees, x, y)) return false;
     }
 
     return true;
@@ -63,8 +62,7 @@ function isVisFromUp(trees: number[][], x: number, y: number) {
 
 function isVisFromDown(trees: number[][], x: number, y: number) {
     for (let i = y + 1; i < getUpDownSize(trees); i++) {
-        if (get(trees, x, i) >= get(trees, x, y))
-            return false;
+        if (get(trees, x, i) >= get(trees, x, y)) return false;
     }
 
     return true;
@@ -75,8 +73,7 @@ function viewDistanceLeft(trees: number[][], x: number, y: number) {
     for (let i = x - 1; i >= 0; i--) {
         counter++;
 
-        if (get(trees, i, y) >= get(trees, x, y))
-            break;
+        if (get(trees, i, y) >= get(trees, x, y)) break;
     }
 
     return counter;
@@ -87,8 +84,7 @@ function viewDistanceRight(trees: number[][], x: number, y: number) {
     for (let i = x + 1; i < getLeftRightSize(trees); i++) {
         counter++;
 
-        if (get(trees, i, y) >= get(trees, x, y))
-            break;
+        if (get(trees, i, y) >= get(trees, x, y)) break;
     }
 
     return counter;
@@ -99,8 +95,7 @@ function viewDistanceUp(trees: number[][], x: number, y: number) {
     for (let i = y - 1; i >= 0; i--) {
         counter++;
 
-        if (get(trees, x, i) >= get(trees, x, y))
-            break;
+        if (get(trees, x, i) >= get(trees, x, y)) break;
     }
 
     return counter;
@@ -111,8 +106,7 @@ function viewDistanceDown(trees: number[][], x: number, y: number) {
     for (let i = y + 1; i < getUpDownSize(trees); i++) {
         counter++;
 
-        if (get(trees, x, i) >= get(trees, x, y))
-            break;
+        if (get(trees, x, i) >= get(trees, x, y)) break;
     }
 
     return counter;

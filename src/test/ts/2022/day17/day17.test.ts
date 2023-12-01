@@ -22,7 +22,9 @@ function getRockDown(index: number) {
     return rocksDown[index % rocks.length];
 }
 
-const jetStream: ("<" | ">")[] = getInput().split("").map(v => v as "<" | ">");
+const jetStream: ("<" | ">")[] = getInput()
+    .split("")
+    .map((v) => v as "<" | ">");
 
 function getJetStream(index: number) {
     return jetStream[index % jetStream.length];
@@ -46,22 +48,20 @@ function getHeightAfter(iterations: number) {
         setHeight(grid, height + 3 + newRock.length);
         insertRock(grid, newRock, height + 3);
         //draw(grid, height - 20, height + 10, "+");
-        let pos = {x: 2, y: height + 3 + newRock.length};
+        let pos = { x: 2, y: height + 3 + newRock.length };
         // eslint-disable-next-line no-constant-condition
         while (true) {
             if (getJetStream(iJetStream++) == ">") {
-                if (moveRight(grid, iRock, pos))
-                    pos = {x: pos.x + 1, y: pos.y};
+                if (moveRight(grid, iRock, pos)) pos = { x: pos.x + 1, y: pos.y };
 
                 //draw(grid, height - 20, height + 10, ">");
             } else {
-                if (moveLeft(grid, iRock, pos))
-                    pos = {x: pos.x - 1, y: pos.y};
+                if (moveLeft(grid, iRock, pos)) pos = { x: pos.x - 1, y: pos.y };
 
                 //draw(grid, height - 20, height + 10, "<");
             }
             if (!moveDown(grid, iRock, pos)) break;
-            pos = {x: pos.x, y: pos.y - 1};
+            pos = { x: pos.x, y: pos.y - 1 };
             //draw(grid, height - 20, height + 10, "V continue");
         }
         //draw(grid, height - 20, height + 10, "V stop");
@@ -95,7 +95,7 @@ function insertRock(grid: Rock, rock: Rock, height: number): Rock {
     return grid;
 }
 
-function moveRight(grid: Rock, rockIndex: number, pos: { x: number, y: number }): boolean {
+function moveRight(grid: Rock, rockIndex: number, pos: { x: number; y: number }): boolean {
     const rockMove = getRockRight(rockIndex);
     for (let y = 0; y < rockMove.length; y++) {
         for (let x = 0; x < rockMove[y].length; x++) {
@@ -117,7 +117,7 @@ function moveRight(grid: Rock, rockIndex: number, pos: { x: number, y: number })
     return true;
 }
 
-function moveLeft(grid: Rock, rockIndex: number, pos: { x: number, y: number }) {
+function moveLeft(grid: Rock, rockIndex: number, pos: { x: number; y: number }) {
     const rockMove = getRockLeft(rockIndex);
     for (let y = 0; y < rockMove.length; y++) {
         for (let x = 0; x < rockMove[y].length; x++) {
@@ -139,7 +139,7 @@ function moveLeft(grid: Rock, rockIndex: number, pos: { x: number, y: number }) 
     return true;
 }
 
-function moveDown(grid: Rock, rockIndex: number, pos: { x: number, y: number }): boolean {
+function moveDown(grid: Rock, rockIndex: number, pos: { x: number; y: number }): boolean {
     const rockMove = getRockDown(rockIndex);
     for (let y = 0; y < rockMove.length; y++) {
         for (let x = 0; x < rockMove[y].length; x++) {
@@ -165,23 +165,18 @@ const rocks: Rock[] = [
     [
         [" ", "#", " "],
         ["#", "#", "#"],
-        [" ", "#", " "],
+        [" ", "#", " "]
     ],
     [
         [" ", " ", "#"],
         [" ", " ", "#"],
-        ["#", "#", "#"],
+        ["#", "#", "#"]
     ],
-    [
-        ["#"],
-        ["#"],
-        ["#"],
-        ["#"]
-    ],
+    [["#"], ["#"], ["#"], ["#"]],
     [
         ["#", "#"],
-        ["#", "#"],
-    ],
+        ["#", "#"]
+    ]
 ];
 
 const rocksLeft: Rock[] = [
@@ -189,23 +184,18 @@ const rocksLeft: Rock[] = [
     [
         [" ", "#", " "],
         ["#", " ", " "],
-        [" ", "#", " "],
+        [" ", "#", " "]
     ],
     [
         [" ", " ", "#"],
         [" ", " ", "#"],
-        ["#", " ", " "],
+        ["#", " ", " "]
     ],
-    [
-        ["#"],
-        ["#"],
-        ["#"],
-        ["#"]
-    ],
+    [["#"], ["#"], ["#"], ["#"]],
     [
         ["#", " "],
-        ["#", " "],
-    ],
+        ["#", " "]
+    ]
 ];
 
 const rocksRight: Rock[] = [
@@ -213,23 +203,18 @@ const rocksRight: Rock[] = [
     [
         [" ", "#", " "],
         [" ", " ", "#"],
-        [" ", "#", " "],
+        [" ", "#", " "]
     ],
     [
         [" ", " ", "#"],
         [" ", " ", "#"],
-        [" ", " ", "#"],
+        [" ", " ", "#"]
     ],
-    [
-        ["#"],
-        ["#"],
-        ["#"],
-        ["#"]
-    ],
+    [["#"], ["#"], ["#"], ["#"]],
     [
         [" ", "#"],
-        [" ", "#"],
-    ],
+        [" ", "#"]
+    ]
 ];
 
 const rocksDown: Rock[] = [
@@ -237,21 +222,16 @@ const rocksDown: Rock[] = [
     [
         [" ", " ", " "],
         ["#", " ", "#"],
-        [" ", "#", " "],
+        [" ", "#", " "]
     ],
     [
         [" ", " ", " "],
         [" ", " ", " "],
-        ["#", "#", "#"],
+        ["#", "#", "#"]
     ],
-    [
-        [" "],
-        [" "],
-        [" "],
-        ["#"]
-    ],
+    [[" "], [" "], [" "], ["#"]],
     [
         [" ", " "],
-        ["#", "#"],
-    ],
+        ["#", "#"]
+    ]
 ];

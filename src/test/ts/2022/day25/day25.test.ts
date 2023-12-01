@@ -4,14 +4,16 @@ test("day25", () => {
     console.log(getButtons());
 });
 
-const numbers: number[] = getInput().split("\n").map(r => toDec(r));
+const numbers: number[] = getInput()
+    .split("\n")
+    .map((r) => toDec(r));
 
-function getButtons(){
+function getButtons() {
     const sum = numbers.reduce((a, b) => a + b, 0);
     return toHecto(sum);
 }
 
-function toHecto(value: number){
+function toHecto(value: number) {
     const highestExp = Math.ceil(log5(value));
 
     let val = value;
@@ -19,7 +21,7 @@ function toHecto(value: number){
     for (let exp = highestExp; exp >= 0; exp--) {
         let cv = 0;
         let threshold = 0;
-        for (let i = 0; i < exp; i++){
+        for (let i = 0; i < exp; i++) {
             threshold += 2 * Math.pow(5, i);
         }
 
@@ -34,7 +36,7 @@ function toHecto(value: number){
         } else if (val < -tMax) {
             num[exp] = "=";
             cv = -2;
-        }  else if (val <= -tMin) {
+        } else if (val <= -tMin) {
             num[exp] = "-";
             cv = -1;
         } else {
@@ -45,7 +47,7 @@ function toHecto(value: number){
 
     let result = "";
     let firstDig = false;
-    for (let i = highestExp; i >= 0; i--){
+    for (let i = highestExp; i >= 0; i--) {
         if (!firstDig) {
             if (num[i] == "0") continue;
             else firstDig = true;
@@ -55,15 +57,15 @@ function toHecto(value: number){
     return result;
 }
 
-function log5(value: number){
-   return (value >= 0 ? Math.log(value) : -Math.log(-value)) / Math.log(5);
+function log5(value: number) {
+    return (value >= 0 ? Math.log(value) : -Math.log(-value)) / Math.log(5);
 }
 
-function toDec(value: string){
-    const trans = {"2": 2, "1": 1, "0": 0, "-": -1, "=": -2};
+function toDec(value: string) {
+    const trans = { "2": 2, "1": 1, "0": 0, "-": -1, "=": -2 };
     let fiveCounter = 1;
     let sum = 0;
-    for (let i = value.length- 1; i >= 0; i --){
+    for (let i = value.length - 1; i >= 0; i--) {
         sum += trans[value[i]] * fiveCounter;
         fiveCounter *= 5;
     }

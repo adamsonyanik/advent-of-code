@@ -4,7 +4,10 @@ test("day22", () => {
     console.log(getFinalCoords());
 });
 
-const map: string[][] = getInput().split("\n\n")[0].split("\n").map(r => r.split(""));
+const map: string[][] = getInput()
+    .split("\n\n")[0]
+    .split("\n")
+    .map((r) => r.split(""));
 
 for (let y = 0; y < map.length; y++) {
     for (let x = map[y].length; x < map[0].length; x++) {
@@ -22,21 +25,20 @@ for (let i = 0; i < password.length; i++) {
     } else {
         if (i == 0 || instructions[instructions.length - 1] == "L" || instructions[instructions.length - 1] == "R")
             instructions.push(password[i]);
-        else
-            instructions[instructions.length - 1] += password[i];
+        else instructions[instructions.length - 1] += password[i];
     }
 }
 
-const moves: (number | "L" | "R")[] = instructions.map(i => {
+const moves: (number | "L" | "R")[] = instructions.map((i) => {
     if (i == "L" || i == "R") {
         return i;
     } else return Number(i);
 });
 
-let pos = {x: 0, y: 0, facing: "r"};
+let pos = { x: 0, y: 0, facing: "r" };
 for (let x = 0; x < map[0].length; x++) {
     if (map[0][x] == ".") {
-        pos = {x: x, y: 0, facing: "r"};
+        pos = { x: x, y: 0, facing: "r" };
         break;
     }
 }
@@ -46,7 +48,7 @@ for (let x = 0; x < map[0].length; x++) {
 // U
 function move(steps: number): boolean {
     for (let i = 0; i < steps; i++) {
-        let newPos = {x: pos.x, y: pos.y, facing: pos.facing};
+        let newPos = { x: pos.x, y: pos.y, facing: pos.facing };
         switch (pos.facing) {
             case "u":
                 newPos.y--;
@@ -62,41 +64,59 @@ function move(steps: number): boolean {
                 break;
         }
 
-        if (newPos.x < 0 || newPos.x >= map[0].length || newPos.y < 0 || newPos.y >= map.length || map[newPos.y][newPos.x] == " ") {
-            if (newPos.y < 0 && newPos.x < 100) { // f - u
-                newPos = {x: 0, y: newPos.x - 50 + 150, facing: getTurn("R", newPos.facing)};
-            } else if (newPos.y < 0 && newPos.x > 99) { // r - u
-                newPos = {x: newPos.x - 100, y: 199, facing: newPos.facing};
-            } else if (newPos.x == 150) { // r - b
-                newPos = {x: 99, y: 149 - newPos.y, facing: getTurn("O", newPos.facing)};
-            } else if (newPos.x == 49 && newPos.y < 50 && newPos.facing == "l") { // f - l
-                newPos = {x: 0, y: 149 - newPos.y, facing: getTurn("O", newPos.facing)};
-            } else if (newPos.x >= 100 && newPos.y == 50 && newPos.facing == "d") { // r - d
-                newPos = {x: 99, y: 50 + newPos.x - 100, facing: getTurn("R", newPos.facing)};
-            } else if (newPos.x == 49 && newPos.y >= 50 && newPos.y <= 99 && newPos.facing == "l") { // d - l
-                newPos = {x: newPos.y - 50, y: 100, facing: getTurn("L", newPos.facing)};
-            } else if (newPos.x == 100 && newPos.y >= 50 && newPos.y <= 99 && newPos.facing == "r") { // d - r
-                newPos = {x: newPos.y - 50 + 100, y: 49, facing: getTurn("L", newPos.facing)};
-            } else if (newPos.x < 0 && newPos.y < 150) { // l - f
-                newPos = {x: 50, y: 49 - (newPos.y - 100), facing: getTurn("O", newPos.facing)};
-            } else if (newPos.x < 50 && newPos.y == 99 && newPos.facing == "u") { // l - d
-                newPos = {x: 50, y: newPos.x + 50, facing: getTurn("R", newPos.facing)};
-            } else if (newPos.x == 100 && newPos.y > 99 && newPos.facing == "r") { // b - r
-                newPos = {x: 149, y: 49 - (newPos.y - 100), facing: getTurn("O", newPos.facing)};
-            } else if (newPos.x > 49 && newPos.y == 150 && newPos.facing == "d") { // b - u
-                newPos = {x: 49, y: 150 + newPos.x - 50, facing: getTurn("R", newPos.facing)};
-            } else if (newPos.x < 0 && newPos.y > 149) { // u - f
-                newPos = {x: 50 + (newPos.y - 150), y: 0, facing: getTurn("L", newPos.facing)};
-            } else if (newPos.y > 199) { // u - r
-                newPos = {x: newPos.x + 100, y: 0, facing: newPos.facing};
-            } else if (newPos.x == 50 && newPos.y > 149 && newPos.facing == "r") { // u - b
-                newPos = {x: newPos.y - 150 + 50, y: 149, facing: getTurn("L", newPos.facing)};
-            } else
-                throw new Error(newPos.x + ", " + newPos.y + ", " + newPos.facing);
+        if (
+            newPos.x < 0 ||
+            newPos.x >= map[0].length ||
+            newPos.y < 0 ||
+            newPos.y >= map.length ||
+            map[newPos.y][newPos.x] == " "
+        ) {
+            if (newPos.y < 0 && newPos.x < 100) {
+                // f - u
+                newPos = { x: 0, y: newPos.x - 50 + 150, facing: getTurn("R", newPos.facing) };
+            } else if (newPos.y < 0 && newPos.x > 99) {
+                // r - u
+                newPos = { x: newPos.x - 100, y: 199, facing: newPos.facing };
+            } else if (newPos.x == 150) {
+                // r - b
+                newPos = { x: 99, y: 149 - newPos.y, facing: getTurn("O", newPos.facing) };
+            } else if (newPos.x == 49 && newPos.y < 50 && newPos.facing == "l") {
+                // f - l
+                newPos = { x: 0, y: 149 - newPos.y, facing: getTurn("O", newPos.facing) };
+            } else if (newPos.x >= 100 && newPos.y == 50 && newPos.facing == "d") {
+                // r - d
+                newPos = { x: 99, y: 50 + newPos.x - 100, facing: getTurn("R", newPos.facing) };
+            } else if (newPos.x == 49 && newPos.y >= 50 && newPos.y <= 99 && newPos.facing == "l") {
+                // d - l
+                newPos = { x: newPos.y - 50, y: 100, facing: getTurn("L", newPos.facing) };
+            } else if (newPos.x == 100 && newPos.y >= 50 && newPos.y <= 99 && newPos.facing == "r") {
+                // d - r
+                newPos = { x: newPos.y - 50 + 100, y: 49, facing: getTurn("L", newPos.facing) };
+            } else if (newPos.x < 0 && newPos.y < 150) {
+                // l - f
+                newPos = { x: 50, y: 49 - (newPos.y - 100), facing: getTurn("O", newPos.facing) };
+            } else if (newPos.x < 50 && newPos.y == 99 && newPos.facing == "u") {
+                // l - d
+                newPos = { x: 50, y: newPos.x + 50, facing: getTurn("R", newPos.facing) };
+            } else if (newPos.x == 100 && newPos.y > 99 && newPos.facing == "r") {
+                // b - r
+                newPos = { x: 149, y: 49 - (newPos.y - 100), facing: getTurn("O", newPos.facing) };
+            } else if (newPos.x > 49 && newPos.y == 150 && newPos.facing == "d") {
+                // b - u
+                newPos = { x: 49, y: 150 + newPos.x - 50, facing: getTurn("R", newPos.facing) };
+            } else if (newPos.x < 0 && newPos.y > 149) {
+                // u - f
+                newPos = { x: 50 + (newPos.y - 150), y: 0, facing: getTurn("L", newPos.facing) };
+            } else if (newPos.y > 199) {
+                // u - r
+                newPos = { x: newPos.x + 100, y: 0, facing: newPos.facing };
+            } else if (newPos.x == 50 && newPos.y > 149 && newPos.facing == "r") {
+                // u - b
+                newPos = { x: newPos.y - 150 + 50, y: 149, facing: getTurn("L", newPos.facing) };
+            } else throw new Error(newPos.x + ", " + newPos.y + ", " + newPos.facing);
         }
 
-        if (map[newPos.y][newPos.x] == "#")
-            return false;
+        if (map[newPos.y][newPos.x] == "#") return false;
 
         pos = newPos;
     }
@@ -191,108 +211,107 @@ function getFaceCount(face: string) {
 }
 
 function getFinalCoords() {
-    pos = {x: 50, y: 0, facing: "u"};
+    pos = { x: 50, y: 0, facing: "u" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 50, y: 0, facing: "l"};
+    pos = { x: 50, y: 0, facing: "l" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 149, y: 0, facing: "r"};
+    pos = { x: 149, y: 0, facing: "r" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 100, y: 0, facing: "u"};
+    pos = { x: 100, y: 0, facing: "u" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 100, y: 49, facing: "d"};
+    pos = { x: 100, y: 49, facing: "d" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 50, y: 50, facing: "l"};
+    pos = { x: 50, y: 50, facing: "l" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 99, y: 50, facing: "r"};
+    pos = { x: 99, y: 50, facing: "r" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 0, y: 100, facing: "l"};
+    pos = { x: 0, y: 100, facing: "l" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 99, y: 100, facing: "r"};
+    pos = { x: 99, y: 100, facing: "r" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 0, y: 100, facing: "u"};
+    pos = { x: 0, y: 100, facing: "u" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 50, y: 149, facing: "d"};
+    pos = { x: 50, y: 149, facing: "d" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 49, y: 150, facing: "r"};
+    pos = { x: 49, y: 150, facing: "r" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 0, y: 150, facing: "l"};
+    pos = { x: 0, y: 150, facing: "l" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 0, y: 199, facing: "d"};
+    pos = { x: 0, y: 199, facing: "d" };
     drawPos();
     move(1);
     draw();
 
     console.log();
 
-    pos = {x: 50, y: 0, facing: "r"};
+    pos = { x: 50, y: 0, facing: "r" };
     for (const m of moves) {
-        if (m == "L" || m == "R")
-            turn(m);
+        if (m == "L" || m == "R") turn(m);
         else move(m);
     }
 
@@ -300,18 +319,12 @@ function getFinalCoords() {
 }
 
 function getCubeFace(x: number, y: number) {
-    if (y < 50 && x < 100)
-        return "F";
-    else if (y < 50 && x < 150)
-        return "R";
-    else if (y < 100)
-        return "D";
-    else if (y < 150 && x < 50)
-        return "L";
-    else if (y < 150)
-        return "B";
-    else if (y < 200 && x < 50)
-        return "U";
+    if (y < 50 && x < 100) return "F";
+    else if (y < 50 && x < 150) return "R";
+    else if (y < 100) return "D";
+    else if (y < 150 && x < 50) return "L";
+    else if (y < 150) return "B";
+    else if (y < 200 && x < 50) return "U";
 
     throw new Error();
 }

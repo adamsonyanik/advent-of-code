@@ -12,12 +12,10 @@ function getIndexOfFirstPacket() {
         let shouldBreak = true;
         for (let f = 0; f < 14; f++) {
             for (let s = f + 1; s < 14; s++) {
-                if (input.charAt(i + f) === input.charAt(i + s))
-                    shouldBreak = false;
+                if (input.charAt(i + f) === input.charAt(i + s)) shouldBreak = false;
             }
         }
-        if (shouldBreak)
-            break;
+        if (shouldBreak) break;
     }
 
     return i + 14;
