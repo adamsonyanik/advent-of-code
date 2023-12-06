@@ -1,5 +1,6 @@
 import data from "./day-data.json";
 import example from "./day-example.json";
+import "../../../../utils/string-parser";
 
 test("level 1 example", () => {
     console.log(run(example));
@@ -10,6 +11,6 @@ test("level 1", () => {
 });
 
 function run(_input: string) {
-    const input: string[] = _input.split("\n");
+    const input: string[] = _input.lines().map((l) => l);
     return 0;
 }
