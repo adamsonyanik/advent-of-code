@@ -89,6 +89,8 @@ interface Array<T> {
      * not needed on <b><i>(number | string)[]</i></b>
      */
     bucket(fn?: (value: T, index: number) => number | string): { hash: number | string; items: T[]; size: number }[];
+
+    log(toJson?: boolean, ref?: { value: any }): T[];
 }
 
 Array.prototype.sortNumericAsc = function <T>(fn: (element: T) => number = (v) => v as unknown as number): T[] {
@@ -196,4 +198,10 @@ Array.prototype.bucket = function <T>(fn: (value: T, index: number) => number | 
         item.size = item.items.length;
     }
     return [...buckets.values()];
+};
+
+Array.prototype.log = function <T>(toJson: boolean = false, ref?: { value: any }) {
+    console.log(toJson ? this : JSON.stringify(this, null, 4));
+    if (ref) ref.value = [...this];
+    return this;
 };

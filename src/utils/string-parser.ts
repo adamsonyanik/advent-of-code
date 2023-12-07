@@ -52,6 +52,8 @@ interface String {
     substrFrom(searchStringStart: string): string;
     substrBetweenFirstLast(searchStringStart: string, searchStringEnd?: string): string;
     substrBetweenFirst(searchStringStart: string, searchStringEnd: string, position?: number): string;
+
+    log(ref?: { value: any }): string;
 }
 
 String.prototype.lines = function (separator: string | RegExp = "\n", limit?: number | undefined) {
@@ -104,4 +106,10 @@ String.prototype.substrBetweenFirstLast = function (searchStringStart: string, s
 String.prototype.substrBetweenFirst = function (searchStringStart: string, searchStringEnd: string, position?: number) {
     const startIndex = this.indexOf(searchStringStart, position) + searchStringStart.length;
     return this.substring(startIndex, this.indexOf(searchStringEnd, startIndex));
+};
+
+String.prototype.log = function (ref?: { value: any }) {
+    console.log(this);
+    if (ref) ref.value = this;
+    return "" + this;
 };
