@@ -1,7 +1,6 @@
 import data from "./day-data.json";
 import example from "./day-example.json";
-import "../../../../utils/array";
-import "../../../../utils/string-parser";
+import "../../../../utils/index";
 
 test("level 1 example", () => {
     console.log(run(example));
