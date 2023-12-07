@@ -1,7 +1,7 @@
 import data from "./day-data.json";
 import example from "./day-example.json";
+import "../../../../utils/array";
 import "../../../../utils/string-parser";
-import { bucket, sortAlphaAsc, sortNumericDesc, sumF } from "../../../../utils/array";
 
 test("level 1 example", () => {
     console.log(run(example));
@@ -26,13 +26,13 @@ function run(_input: string) {
         )
     }));
 
-    input.sort(sortAlphaAsc((a) => a.rank));
-    return sumF(input, (v, i) => (i + 1) * v.bid);
+    input.sortAlphaAsc((a) => a.rank);
+    return input.map((v, i) => (i + 1) * v.bid).sum();
 }
 
 function rank(cards: string[]) {
-    const hand = bucket(cards);
-    hand.sort(sortNumericDesc((e) => e.size));
+    const hand = cards.bucket();
+    hand.sortNumericDesc((e) => e.size);
 
     let v = 0;
     if (hand[0].size >= 5) v = 6;
