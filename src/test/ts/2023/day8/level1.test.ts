@@ -15,12 +15,10 @@ function run(_input: string) {
     const input: { id: string; lr: string[] }[] = _input
         .lines()
         .slice(2)
-        .map((l) => {
-            return {
-                id: l.split(" = ")[0],
-                lr: l.split(" = ")[1].words(/[a-zA-Z0-9]+/g)
-            };
-        });
+        .map((l) => ({
+            id: l.split(" = ")[0],
+            lr: l.split(" = ")[1].words(/[a-zA-Z0-9]+/g)
+        }));
 
     const map = input.toMap((v) => v.id);
 
