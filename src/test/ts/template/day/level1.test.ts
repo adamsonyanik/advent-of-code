@@ -11,6 +11,6 @@ test("level 1", () => {
 });
 
 function run(_input: string) {
-    const input: string[] = _input.lines().map((l) => l);
+    const input = _input.lines().map((l) => l);
     return 0;
 }
