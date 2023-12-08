@@ -88,7 +88,7 @@ interface Array<T> {
      *
      * not needed on <b><i>(number | string)[]</i></b>
      */
-    bucket(fn?: (value: T, index: number) => number | string): { hash: number | string; items: T[]; size: number }[];
+    bucket<H extends number | string>(fn?: (value: T, index: number) => H): { hash: H; items: T[]; size: number }[];
 
     /**
      * puts the items into a map based on the hash, which is obtained by applying fn
@@ -97,7 +97,7 @@ interface Array<T> {
      *
      * not needed on <b><i>(number | string)[]</i></b>
      */
-    toMap(fn?: (value: T, index: number) => number | string): Map<number | string, T>;
+    toMap<H extends number | string>(fn?: (value: T, index: number) => H): Map<H, T>;
 
     log(toJson?: boolean, ref?: { value: any }): T[];
 }
@@ -196,10 +196,8 @@ Array.prototype.mul = function () {
     return prod;
 };
 
-Array.prototype.bucket = function <T>(
-    fn: (value: T, index: number) => number | string = (v) => v as unknown as number | string
-) {
-    const buckets = new Map<number | string, { hash: number | string; items: T[]; size: number }>();
+Array.prototype.bucket = function <T, H>(fn: (value: T, index: number) => H = (v) => v as unknown as H) {
+    const buckets = new Map<H, { hash: H; items: T[]; size: number }>();
     for (let i = 0; i < this.length; i++) {
         const hash = fn(this[i], i);
         if (!buckets.has(hash)) buckets.set(hash, { hash, items: [], size: 0 });
@@ -211,10 +209,8 @@ Array.prototype.bucket = function <T>(
     return [...buckets.values()];
 };
 
-Array.prototype.toMap = function <T>(
-    fn: (value: T, index: number) => number | string = (v) => v as unknown as number | string
-) {
-    const map = new Map<number | string, T>();
+Array.prototype.toMap = function <T, H>(fn: (value: T, index: number) => H = (v) => v as unknown as H) {
+    const map = new Map<H, T>();
     for (let i = 0; i < this.length; i++) {
         const hash = fn(this[i], i);
         if (!map.has(hash)) map.set(hash, this[i]);
