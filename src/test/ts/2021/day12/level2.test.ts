@@ -1,14 +1,8 @@
-import data from "./day-data.json";
-import example from "./day-example.json";
 import "../../../../utils/index";
+import { readExample, readInput } from "../../../../utils";
 
-test("level 2 example", () => {
-    console.log(run(example));
-});
-
-test("level 2", () => {
-    console.log(run(data));
-});
+test("level 2 example", async () => console.log(run(await readExample(__dirname))));
+test("level 2", async () => console.log(run(await readInput(__dirname))));
 
 function run(_input: string) {
     const input = _input

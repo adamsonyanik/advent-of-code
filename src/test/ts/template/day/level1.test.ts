@@ -1,14 +1,9 @@
-import data from "./day-data.json";
-import example from "./day-example.json";
 import "../../../../utils/index";
+import { downloadInputAsync, readExample, readInput } from "../../../../utils";
 
-test("level 1 example", () => {
-    console.log(run(example));
-});
-
-test("level 1", () => {
-    console.log(run(data));
-});
+test("download input", async () => await downloadInputAsync(__dirname));
+test("level 1 example", async () => console.log(run(await readExample(__dirname))));
+test("level 1", async () => console.log(run(await readInput(__dirname))));
 
 function run(_input: string) {
     const input = _input.lines().map((l) => l);
