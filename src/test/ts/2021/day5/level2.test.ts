@@ -20,8 +20,8 @@ function run(_input: string) {
             let disY = y2 - y1;
             while (disX != 0 || disY != 0) {
                 p.push({ x: x2 - disX, y: y2 - disY });
-                disX = disX == 0 ? 0 : disX - disX / Math.abs(disX);
-                disY = disY == 0 ? 0 : disY - disY / Math.abs(disY);
+                disX = disX - Math.sign(disX);
+                disY = disY - Math.sign(disY);
             }
             return p;
         })
