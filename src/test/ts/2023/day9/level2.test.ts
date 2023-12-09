@@ -11,7 +11,7 @@ function run(_input: string) {
     for (const l of input) {
         const d = [l];
 
-        while (!d.get(-1).every((v) => v == 0)) d.push(getDiv(d.get(-1)));
+        while (!d.at(-1)!.every((v) => v == 0)) d.push(getDiv(d.at(-1)!));
         for (let i = d.length - 2; i >= 0; i--) d[i] = [d[i][0] - d[i + 1][0], ...d[i]];
 
         v.push(d[0][0]);

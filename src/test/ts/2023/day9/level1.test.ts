@@ -12,10 +12,10 @@ function run(_input: string) {
     for (const l of input) {
         const d = [l];
 
-        while (!d.get(-1).every((v) => v == 0)) d.push(getDiv(d.get(-1)));
-        for (let i = d.length - 2; i >= 0; i--) d[i].push(d[i].get(-1) + d[i + 1].get(-1));
+        while (!d.at(-1)!.every((v) => v == 0)) d.push(getDiv(d.at(-1)!));
+        for (let i = d.length - 2; i >= 0; i--) d[i].push(d[i].at(-1)! + d[i + 1].at(-1)!);
 
-        v.push(d[0].get(-1));
+        v.push(d[0].at(-1)!);
     }
 
     function getDiv(inp: number[]) {
