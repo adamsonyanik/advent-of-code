@@ -100,6 +100,12 @@ interface Array<T> {
     toMap<H extends number | string>(fn?: (value: T, index: number) => H): Map<H, T>;
 
     log(toJson?: boolean, ref?: { value: any }): T[];
+
+    /**
+     * indexes into array, negatives are bend to length + index
+     * @param index
+     */
+    get(index: number): T;
 }
 
 Array.prototype.sortNumericAsc = function <T>(fn: (element: T) => number = (v) => v as unknown as number): T[] {
@@ -222,4 +228,9 @@ Array.prototype.log = function <T>(toJson: boolean = false, ref?: { value: any }
     console.log(toJson ? this : JSON.stringify(this, null, 4));
     if (ref) ref.value = [...this];
     return this;
+};
+
+Array.prototype.get = function <T>(index: number) {
+    if (index < 0) return this[this.length + index];
+    return this[index];
 };

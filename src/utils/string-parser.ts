@@ -28,9 +28,15 @@ interface String {
 
     /**
      * matches string
-     * @param matcher default is /\d+/g
+     * @param matcher default is /-?\d+/g
      */
     numbers(matcher?: { [Symbol.match](string: string): RegExpMatchArray | null }): number[];
+
+    /**
+     * matches string
+     * @param matcher default is /\d+/g
+     */
+    positivNumbers(matcher?: { [Symbol.match](string: string): RegExpMatchArray | null }): number[];
 
     /**
      * matches string
@@ -74,12 +80,18 @@ String.prototype.reduceWS = function (
     return this.trim().replace(searchValue, replaceValue);
 };
 
-String.prototype.numbers = function (matcher: { [Symbol.match](string: string): RegExpMatchArray | null } = /\d+/g) {
+String.prototype.numbers = function (matcher: { [Symbol.match](string: string): RegExpMatchArray | null } = /-?\d+/g) {
     return this.match(matcher)!.map((n) => Number(n));
 };
 
+String.prototype.positivNumbers = function (
+    matcher: { [Symbol.match](string: string): RegExpMatchArray | null } = /\d+/g
+) {
+    return this.numbers(matcher);
+};
+
 String.prototype.digits = function (matcher: { [Symbol.match](string: string): RegExpMatchArray | null } = /\d/g) {
-    return this.match(matcher)!.map((n) => Number(n));
+    return this.numbers(matcher);
 };
 
 String.prototype.words = function (
