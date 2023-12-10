@@ -62,7 +62,7 @@ interface String {
     log(ref?: { value: any }): string;
 }
 
-String.prototype.lines = function (separator: string | RegExp = "\n", limit?: number | undefined) {
+String.prototype.lines = function (separator: string | RegExp = /\n|\r\n/g, limit?: number | undefined) {
     return this.split(separator, limit);
 };
 
