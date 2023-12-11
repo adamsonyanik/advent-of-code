@@ -99,6 +99,13 @@ interface Array<T> {
      */
     toMap<H extends number | string>(fn?: (value: T, index: number) => H): Map<H, T>;
 
+    /**
+     * transposes 2 dimensional array
+     *
+     * <b><i>!!! can only be called on T[][]</i></b>
+     */
+    transpose(): T[];
+
     log(toJson?: boolean, ref?: { value: any }): T[];
 }
 
@@ -216,6 +223,17 @@ Array.prototype.toMap = function <T, H>(fn: (value: T, index: number) => H = (v)
         if (!map.has(hash)) map.set(hash, this[i]);
     }
     return map;
+};
+
+Array.prototype.transpose = function <T>() {
+    const transposed: T[][] = [];
+    for (let i = 0; i < this.length; i++) {
+        for (let j = 0; j < this[i].length; j++) {
+            if (i == 0) transposed.push([]);
+            transposed[j].push(this[i][j]);
+        }
+    }
+    return transposed;
 };
 
 Array.prototype.log = function <T>(toJson: boolean = false, ref?: { value: any }) {
