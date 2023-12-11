@@ -225,11 +225,11 @@ Array.prototype.toMap = function <T, H>(fn: (value: T, index: number) => H = (v)
     return map;
 };
 
-Array.prototype.transpose = function <T>() {
-    const transposed: T[][] = [];
+Array.prototype.transpose = function <T extends Array<any>>() {
+    const transposed: T[] = [];
     for (let i = 0; i < this.length; i++) {
         for (let j = 0; j < this[i].length; j++) {
-            if (i == 0) transposed.push([]);
+            if (i == 0) transposed.push([] as unknown as T);
             transposed[j].push(this[i][j]);
         }
     }
