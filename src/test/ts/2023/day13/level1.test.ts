@@ -6,7 +6,7 @@ test("level 1 example", async () => console.log(run(await readExample(__dirname)
 test("level 1", async () => console.log(run(await readInput(__dirname))));
 
 function run(_input: string) {
-    const input = _input.split(/\r\n\r\n|\n\n/g).map((grid) => {
+    const input = _input.split(/\n\n/g).map((grid) => {
         return grid.lines().map((l) => l.chars());
     });
 

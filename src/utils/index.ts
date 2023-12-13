@@ -24,7 +24,7 @@ export const range = (a: number, b: number) => {
 };
 
 export const readExample = async (dir: string) => {
-    return readFile(dir, "example.txt").trim();
+    return readFile(dir, "example.txt").replace(/\r/g, "").trim();
 };
 
 export const readInput = async (dir: string) => {
@@ -37,7 +37,7 @@ export const readInput = async (dir: string) => {
             fs.writeFile(`${dir}/${fileName}`, input, () => {});
         } else return "";
     }
-    return input.trim();
+    return input.replace(/\r/g, "").trim();
 };
 
 const readFile = (dir: string, fileName: string) => {
