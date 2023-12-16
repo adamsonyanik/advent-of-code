@@ -109,11 +109,11 @@ function run(_input: string) {
 
     for (let y = 0; y < input.length; y++) {
         startBeams.push({ x: 0, y, dir: "r" });
-        startBeams.push({ x: input.length - 1, y, dir: "l" });
+        startBeams.push({ x: input[0].length - 1, y, dir: "l" });
     }
     for (let x = 0; x < input[0].length; x++) {
         startBeams.push({ x, y: 0, dir: "b" });
-        startBeams.push({ x, y: input[0].length - 1, dir: "t" });
+        startBeams.push({ x, y: input.length - 1, dir: "t" });
     }
 
     return startBeams.map((s) => energize(s)).max();
