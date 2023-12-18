@@ -11,55 +11,30 @@ function run(_input: string) {
         len: Number(l.split(" ")[1])
     }));
 
+    const coords = new Set<string>();
     let pos = { x: 0, y: 0 };
-    const coords = [{ x: 0, y: 0 }];
 
     for (const ins of input) {
-        if (ins.dir == "R") for (let i = 0; i < ins.len; i++) coords.push({ x: ++pos.x, y: pos.y });
-        if (ins.dir == "U") for (let i = 0; i < ins.len; i++) coords.push({ x: pos.x, y: --pos.y });
-        if (ins.dir == "L") for (let i = 0; i < ins.len; i++) coords.push({ x: --pos.x, y: pos.y });
-        if (ins.dir == "D") for (let i = 0; i < ins.len; i++) coords.push({ x: pos.x, y: ++pos.y });
+        if (ins.dir == "R") for (let i = 0; i < ins.len; i++) coords.add(++pos.x + "," + pos.y);
+        if (ins.dir == "U") for (let i = 0; i < ins.len; i++) coords.add(pos.x + "," + --pos.y);
+        if (ins.dir == "L") for (let i = 0; i < ins.len; i++) coords.add(--pos.x + "," + pos.y);
+        if (ins.dir == "D") for (let i = 0; i < ins.len; i++) coords.add(pos.x + "," + ++pos.y);
     }
 
-    const minX = coords.map((c) => c.x).min();
-    const minY = coords.map((c) => c.y).min();
-    const maxX = coords.map((c) => c.x).max();
-    const maxY = coords.map((c) => c.y).max();
-
-    const grid: string[][] = [];
-    for (let y = minY; y <= maxY; y++) {
-        grid.push([]);
-        for (let x = minX - 1; x <= maxX; x++) {
-            if (coords.filter((c) => c.x == x && c.y == y).length > 0) {
-                grid.at(-1)!.push("#");
-            } else {
-                grid.at(-1)!.push(".");
-            }
-        }
-    }
-
-    const open: { x: number; y: number }[] = [{ x: -minX + coords[0].x + 2, y: -minY + coords[0].y + 1 }]; //[{ x: 1, y: 1 }];
-    const closed = new Set<string>();
-
+    const open: { x: number; y: number }[] = [{ x: 2, y: 1 }];
     while (open.length) {
         const pos = open.pop()!;
-        if (closed.has(pos.x + "," + pos.y)) continue;
-        closed.add(pos.x + "," + pos.y);
+        if (coords.has(pos.x + "," + pos.y)) continue;
+        coords.add(pos.x + "," + pos.y);
 
         for (const dir of [
             { x: 0, y: -1 },
             { x: 1, y: 0 },
             { x: 0, y: 1 },
             { x: -1, y: 0 }
-        ]) {
-            const x = pos.x + dir.x;
-            const y = pos.y + dir.y;
-            if (grid[y] && grid[y][x] != "#") {
-                grid[y][x] = "#";
-                open.push({ x, y });
-            }
-        }
+        ])
+            open.push({ x: pos.x + dir.x, y: pos.y + dir.y });
     }
 
-    return grid.map((r) => r.filter((c) => c == "#").length).sum();
+    return coords.size;
 }
