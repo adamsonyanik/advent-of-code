@@ -9,26 +9,23 @@ function run(_input: string) {
     const ins = _input
         .split("\n\n")[0]
         .lines()
-        .map((l) => {
-            const id = l.substring(0, l.indexOf("{"));
-            return {
-                id,
-                ins: l
-                    .substring(id.length + 1, l.length)
-                    .split(",")
-                    .slice(0, -1)
-                    .map((ins) => ({
-                        part: ins.split(/[><]/)[0],
-                        gt: ins.includes(">"),
-                        n: Number(ins.split(/[><]/)[1].split(":")[0]),
-                        target: ins.split(":")[1]
-                    })),
-                else: l
-                    .split(",")
-                    .at(-1)!
-                    .substring(0, l.split(",").at(-1)!.length - 1)
-            };
-        })
+        .map((l) => ({
+            id: l.substring(0, l.indexOf("{")),
+            ins: l
+                .substring(l.indexOf("{") + 1, l.length)
+                .split(",")
+                .slice(0, -1)
+                .map((ins) => ({
+                    part: ins.split(/[><]/)[0],
+                    gt: ins.includes(">"),
+                    n: Number(ins.split(/[><]/)[1].split(":")[0]),
+                    target: ins.split(":")[1]
+                })),
+            else: l
+                .split(",")
+                .at(-1)!
+                .substring(0, l.split(",").at(-1)!.length - 1)
+        }))
         .toMap((ins) => ins.id);
 
     const partsCollection = _input
@@ -59,5 +56,6 @@ function run(_input: string) {
         }
         if (stage == "A") value += [...parts.values()].map((p) => p.n).sum();
     }
+
     return value;
 }
