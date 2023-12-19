@@ -21,9 +21,9 @@ function run(_input: string) {
                     target: ins.split(":")[1]
                 })),
             else: l
+                .substring(0, l.length - 1)
                 .split(",")
                 .at(-1)!
-                .substring(0, l.split(",").at(-1)!.length - 1)
         }))
         .toMap((ins) => ins.id);
 

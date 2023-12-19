@@ -12,7 +12,7 @@ function run(_input: string) {
         .map((l) => ({
             id: l.substring(0, l.indexOf("{")),
             ins: l
-                .substring(l.indexOf("{") + 1, l.length)
+                .substring(l.indexOf("{") + 1)
                 .split(",")
                 .slice(0, -1)
                 .map((ins) => ({
@@ -22,40 +22,35 @@ function run(_input: string) {
                     target: ins.split(":")[1]
                 })),
             else: l
+                .substring(0, l.length - 1)
                 .split(",")
                 .at(-1)!
-                .substring(0, l.split(",").at(-1)!.length - 1)
         }))
         .toMap((ins) => ins.id);
 
-    const partsCollection = _input
+    return _input
         .split("\n\n")[1]
         .lines()
-        .map((l) =>
-            l
+        .map((l) => {
+            const parts = l
                 .substring(1, l.length - 1)
                 .split(",")
                 .map((p) => ({ id: p.split("=")[0], n: Number(p.split("=")[1]) }))
-                .toMap((p) => p.id)
-        );
+                .toMap((p) => p.id);
 
-    let value = 0;
-
-    for (const parts of partsCollection) {
-        let stage = "in";
-        stageLoop: while (stage != "A" && stage != "R") {
-            const comp = ins.get(stage)!;
-            for (const c of comp.ins) {
-                const pn = parts.get(c.part)!.n;
-                if ((c.gt && pn > c.n) || (!c.gt && pn < c.n)) {
-                    stage = c.target;
-                    continue stageLoop;
+            let stage = "in";
+            stageLoop: while (stage != "A" && stage != "R") {
+                const comp = ins.get(stage)!;
+                for (const c of comp.ins) {
+                    const pn = parts.get(c.part)!.n;
+                    if ((c.gt && pn > c.n) || (!c.gt && pn < c.n)) {
+                        stage = c.target;
+                        continue stageLoop;
+                    }
                 }
+                stage = comp.else;
             }
-            stage = comp.else;
-        }
-        if (stage == "A") value += [...parts.values()].map((p) => p.n).sum();
-    }
-
-    return value;
+            return stage == "A" ? [...parts.values()].map((p) => p.n).sum() : 0;
+        })
+        .sum();
 }
