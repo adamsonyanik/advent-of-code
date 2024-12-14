@@ -29,3 +29,11 @@ export const lcm = (...args: number[]) => args.reduce((p, c) => lcm2(p, c), args
 function lcm2(a: number, b: number) {
     return (a * b) / gcd2(a, b);
 }
+
+export const mod = (a: number, b: number) => {
+    const r = a % b;
+    if (b < 0) return r;
+    if (r < 0) return r + b;
+
+    return r;
+};
