@@ -58,41 +58,62 @@ function run(_input: string, _isExample: boolean) {
         }
     }
 
-    function heuristicPoints(p: { path: Node[]; n: Node; isX: boolean; points: number }) {
-        return p.points;
-    }
+    function dijkstra() {
+        const distance = new Map<Node, { v: Node; dFronX: number; dFronY: number; p: Node[] }>();
+        for (const n of nodes) distance.set(n, { v: n, dFronX: Infinity, dFronY: Infinity, p: [] });
 
-    function addToOpenList(p: { path: Node[]; n: Node; isX: boolean; points: number }) {
-        const h = heuristicPoints;
-        for (let i = 0; i < open.length; i++) {
-            if (h(open[i]) > h(p)) {
-                open.splice(i, 0, p);
-                return;
+        distance.get(start)!.dFronX = 0;
+        distance.get(start)!.dFronY = 1000;
+
+        const Q = [...distance.values()].sort((a, b) => Math.min(a.dFronX, a.dFronY) - Math.min(b.dFronX, b.dFronY));
+
+        while (Q.length > 0) {
+            const u = Q.shift()!;
+            if (Q.length % 100 == 0) console.log(Q.length);
+
+            const fromX = u.dFronX <= u.dFronY;
+            nLoop: for (const v of u.v.n) {
+                const qVI = Q.findIndex((e) => e.v == v.node);
+                if (qVI == -1) continue;
+
+                const vNode = distance.get(v.node)!;
+                const vD = v.isX ? vNode.dFronX : vNode.dFronY;
+                const alt = (fromX ? u.dFronX : u.dFronY) + v.len + (fromX == v.isX ? 0 : 1000);
+                if (alt <= vD) {
+                    if (v.isX) vNode.dFronX = alt;
+                    else vNode.dFronY = alt;
+
+                    if (alt < vD) vNode.p = [];
+                    vNode.p.push(u.v);
+
+                    const qEl = Q.splice(qVI, 1)[0];
+                    for (let i = 0; i < Q.length; i++) {
+                        if (Math.min(Q[i].dFronX, Q[i].dFronY) > alt) {
+                            Q.splice(i, 0, qEl);
+                            continue nLoop;
+                        }
+                    }
+                    Q.push(qEl);
+                }
             }
         }
-
-        open.push(p);
+        return distance;
     }
 
-    const open: { path: Node[]; n: Node; isX: boolean; points: number }[] = [
-        { path: [], n: start, isX: true, points: 0 }
-    ];
+    const d = dijkstra();
 
+    const tileSet = new Set<string>();
+
+    const open = d.get(end)!.p.map((p) => ({ s: end, e: p }));
     while (open.length > 0) {
-        const next = open.shift()!;
-        next.path.push(next.n);
-
-        if (next.n == end) return next.points;
-
-        for (const nei of next.n.n)
-            if (!next.path.includes(nei.node))
-                addToOpenList({
-                    path: [...next.path],
-                    n: nei.node,
-                    isX: nei.isX,
-                    points: next.points + (next.isX == nei.isX ? 0 : 1000) + nei.len
-                });
+        const next = open.pop()!;
+        for (let y = Math.min(next.s.y, next.e.y); y <= Math.max(next.s.y, next.e.y); y++)
+            for (let x = Math.min(next.s.x, next.e.x); x <= Math.max(next.s.x, next.e.x); x++) {
+                input[y][x] = "O";
+                tileSet.add(x + "," + y);
+            }
+        for (const p of d.get(next.e)!.p) open.push({ s: next.e, e: p });
     }
 
-    return nodes.length;
+    return tileSet.size;
 }
