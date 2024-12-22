@@ -27,7 +27,7 @@ function run() {
     }
 
     function getMid(points: number[]) {
-        const factor = 100000 / 3;
+        const factor = 1000 / 3;
         return (
             Math.round((points[0] + points[2] + points[4]) * factor) +
             "," +
@@ -45,7 +45,7 @@ function run() {
         return p;
     }
 
-    function flip(points: number[], f: number) {
+    function flipX(points: number[], f: number) {
         const p = [...points];
         if (f % 2 == 0) return p;
         for (let i = 0; i + 1 < p.length; i += 6) {
@@ -64,6 +64,27 @@ function run() {
         }
 
         return p;
+    }
+
+    function flipY(points: number[], f: number) {
+        let p = [...points];
+        if (f % 2 == 0) return p;
+        for (let i = 0; i + 1 < p.length; i += 6) {
+            const x1 = p[i];
+            const y1 = -p[i + 1];
+            const x2 = p[i + 4];
+            const y2 = -p[i + 5];
+            const x3 = p[i + 2];
+            const y3 = -p[i + 3];
+            p[i] = x1;
+            p[i + 1] = y1;
+            p[i + 2] = x2;
+            p[i + 3] = y2;
+            p[i + 4] = x3;
+            p[i + 5] = y3;
+        }
+
+        return translate(p, 0, -1);
     }
 
     const xTranslate = Math.sin((120 * Math.PI) / 180);
@@ -130,10 +151,164 @@ function run() {
         ...translate(tri(true), xTranslate, -3 * yTranslate)
     ];
 
-    const tiles = [orangeTile, blueTile, greenTile, yellowTile];
-    const colors = [0xffaa00, 0x5588ff, 0x007700, 0xffff00];
+    const tiles = [yellowTile, blueTile, greenTile, orangeTile];
+    const colors = [0xffff00, 0x5588ff, 0x007700, 0xffaa00];
 
-    const edgeGrid1 = [
+    const edgeGridEasy = [
+        [
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [0, 1],
+            [0, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [1, 1],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 0],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1],
+            [1, 1]
+        ]
+    ];
+    const edgeGridHard = [
         [
             [1, 1],
             [1, 1],
@@ -268,141 +443,7 @@ function run() {
             [1, 1]
         ]
     ];
-    const edgeGrid = [
-        [
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [0, 1],
-            [0, 1],
-            [0, 1],
-            [0, 1],
-            [0, 1],
-            [0, 1],
-            [0, 1],
-            [1, 1],
-            [0, 1],
-            [0, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1]
-        ],
-        [
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [1, 1],
-            [1, 1]
-        ],
-        [
-            [1, 1],
-            [1, 1],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [1, 1],
-            [1, 1]
-        ],
-        [
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [1, 1],
-            [1, 1]
-        ],
-        [
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1]
-        ],
-        [
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [0, 0],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1]
-        ],
-        [
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 0],
-            [1, 0],
-            [1, 0],
-            [1, 0],
-            [1, 0],
-            [1, 0],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1],
-            [1, 1]
-        ]
-    ];
+    const edgeGrid = edgeGridHard;
     const edge = [];
     const board = new Set<string>();
 
@@ -418,20 +459,22 @@ function run() {
             else board.add(getMid(tFlipped));
         }
 
-    const possible: { x: number; y: number; a: number; f: number }[][] = [];
+    const possible: { x: number; y: number; a: number; fx: number; fy: number }[][] = [];
 
     for (let tileI = 0; tileI < tiles.length; tileI++) {
         possible[tileI] = [];
-        for (let a = 0; a < 360; a += 60) {
+        for (let a = 0; a < 360; a += 120) {
             const currentTileRotated = rotate(tiles[tileI], a);
-            for (let f = 0; f < 2; f++) {
-                const currentTileRotatedFlipped = flip(currentTileRotated, f);
-                for (let y = 0; y < edgeGrid.length; y++)
-                    for (let x = 0; x < edgeGrid[y].length; x++) {
-                        if ((y + x) % 2 != 0) continue;
-                        const currentTile = translate(currentTileRotatedFlipped, x * xTranslate, y * yTranslate);
-                        if (canPlaceTile(currentTile, board)) possible[tileI].push({ x, y, a, f });
-                    }
+            for (let fx = 0; fx < 2; fx++) {
+                for (let fy = 0; fy < 2; fy++) {
+                    const currentTileRotatedFlipped = flipY(flipX(currentTileRotated, fx), fy);
+                    for (let y = 0; y < edgeGrid.length; y++)
+                        for (let x = 0; x < edgeGrid[y].length; x++) {
+                            if ((y + x) % 2 != 0) continue;
+                            const currentTile = translate(currentTileRotatedFlipped, x * xTranslate, y * yTranslate);
+                            if (canPlaceTile(currentTile, board)) possible[tileI].push({ x, y, a, fx, fy });
+                        }
+                }
             }
         }
     }
@@ -451,16 +494,20 @@ function run() {
 
     function btPlaceTile(
         board: Set<string>,
-        tilePlacement: { x: number; y: number; a: number; f: number }[]
-    ): { x: number; y: number; a: number; f: number }[][] {
-        if (tilePlacement.length == 3) return [tilePlacement];
+        tilePlacement: { x: number; y: number; a: number; fx: number; fy: number }[]
+    ): { x: number; y: number; a: number; fx: number; fy: number }[][] {
+        if (tilePlacement.length == 4) return [tilePlacement];
 
         const configs = [];
 
         const tI = tilePlacement.length;
         for (let i = 0; i < possible[tI].length; i++) {
             const cp = possible[tI][i];
-            const currentTile = translate(flip(rotate(tiles[tI], cp.a), cp.f), cp.x * xTranslate, cp.y * yTranslate);
+            const currentTile = translate(
+                flipY(flipX(rotate(tiles[tI], cp.a), cp.fx), cp.fy),
+                cp.x * xTranslate,
+                cp.y * yTranslate
+            );
             if (!canPlaceTile(currentTile, board)) continue;
 
             const newBoard = new Set([...board]);
@@ -479,10 +526,10 @@ function run() {
                 { mesh: to3D(orangeTile, 0), color: 0xffaa00 },
                 { mesh: to3D(blueTile, 0), color: 0x5588ff },
                 { mesh: to3D(greenTile, 0), color: 0x007700 },
-                { mesh: to3D(yellowTile, 0), color: 0xffff00 },
+                { mesh: to3D(flipY(yellowTile, 1), 0), color: 0xffff00 },
                 { mesh: to3D(edge, -0.5), color: 0xffffff }
             ],
-            [],
+            [{ line: [0, 0, 0, 0, 0, 10], color: 0xff0000 }],
             []
         ]
     };
@@ -492,7 +539,10 @@ function run() {
         meshes["" + (i + 1)] = [
             [
                 ...configs[i].map((t, i) => ({
-                    mesh: to3D(translate(flip(rotate(tiles[i], t.a), t.f), t.x * xTranslate, t.y * yTranslate), 0),
+                    mesh: to3D(
+                        translate(flipY(flipX(rotate(tiles[i], t.a), t.fx), t.fy), t.x * xTranslate, t.y * yTranslate),
+                        0
+                    ),
                     color: colors[i]
                 })),
                 { mesh: to3D(edge, -0.5), color: 0xffffff }
